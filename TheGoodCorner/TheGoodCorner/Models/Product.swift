@@ -36,7 +36,7 @@ struct Product: Identifiable, Decodable, Equatable {
         price = try container.decode(Int.self, forKey: .price)
         categoryId = try container.decode(Int.self, forKey: .categoryId)
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
-        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Untitled listing"
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Untitled product"
         // Assumption: is_urgent is not guaranteed on every item, default to false when absent.
         isUrgent = try container.decodeIfPresent(Bool.self, forKey: .isUrgent) ?? false
         // Assumption: images_url may be entirely absent; treat as "no image" rather than failing decode.

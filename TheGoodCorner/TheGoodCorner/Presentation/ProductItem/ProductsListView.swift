@@ -13,33 +13,36 @@ struct ProductsListView: View {
     
     var body: some View {
         
-        VStack(spacing: 0) {
+        NavigationStack {
             
-            Text("Products")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(.bar)
-                .accessibilityAddTraits(.isHeader)
+            VStack(spacing: 0) {
+                
+                Text("Products")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(.bar)
+                                .accessibilityAddTraits(.isHeader)
+                
+                if !viewModel.categories.isEmpty {
+                    CategoryFilterBar(
+                        categories: viewModel.categories,
+                        selectedCategoryId: viewModel.selectedCategoryId,
+                        onSelect: { viewModel.selectCategory($0) }
+                    )
+                }
+                
+                content
+                
+            } 
             
-            if !viewModel.categories.isEmpty {
-                CategoryFilterBar(
-                    categories: viewModel.categories,
-                    selectedCategoryId: viewModel.selectedCategoryId,
-                    onSelect: { viewModel.selectCategory($0) }
-                )
+            .task {
+                if viewModel.state == .idle {
+                    await viewModel.loadInitialData()
+                }
             }
-            
-            content
-            
         }
-        .task {
-            if viewModel.state == .idle {
-                await viewModel.loadInitialData()
-            }
-        }
-        
     }
     
     @ViewBuilder
@@ -56,11 +59,20 @@ struct ProductsListView: View {
         case .loaded:
             List {
                 ForEach(viewModel.filteredProducts) { product in
-                    ProductRowView(
-                        product: product,
-                        categoryName: viewModel.categoryName(for: product.categoryId),
-                        imageURL: viewModel.imageURL(for: product.imagesUrl?.thumb)
-                    )
+                    NavigationLink {
+                        ProductItemDetailView(
+                            product: product,
+                            categoryName: viewModel.categoryName(for: product.categoryId),
+                            imageURL: viewModel.imageURL(for: product.imagesUrl?.thumb)
+                        )
+                    } label: {
+                        ProductRowView(
+                            product: product,
+                            categoryName: viewModel.categoryName(for: product.categoryId),
+                            imageURL: viewModel.imageURL(for: product.imagesUrl?.thumb)
+                        )
+                    }
+                    
                 }
                 
             }
