@@ -67,3 +67,4 @@ struct Product: Identifiable, Decodable, Equatable {
         return formatter
     }()
 }
+ 

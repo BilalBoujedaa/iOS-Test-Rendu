@@ -29,9 +29,33 @@
 		FA501584308C1D1A00279733 /* TheGoodCornerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheGoodCornerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FAC5FEFB30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "TheGoodCorner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				REFLECTION.md,
+			);
+			target = FA50156C308C1D1900279733 /* TheGoodCorner */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		FAC5FEFC30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "Compile Sources" phase from "TheGoodCorner" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = FA501569308C1D1900279733 /* Sources */;
+			membershipExceptions = (
+				REFLECTION.md,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FA50156F308C1D1900279733 /* TheGoodCorner */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FAC5FEFB30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "TheGoodCorner" target */,
+				FAC5FEFC30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "Compile Sources" phase from "TheGoodCorner" target */,
+			);
 			path = TheGoodCorner;
 			sourceTree = "<group>";
 		};

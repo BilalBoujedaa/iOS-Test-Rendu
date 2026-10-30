@@ -18,12 +18,12 @@ struct ProductsListView: View {
             VStack(spacing: 0) {
                 
                 Text("Products")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                                .background(.bar)
-                                .accessibilityAddTraits(.isHeader)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(.bar)
+                    .accessibilityAddTraits(.isHeader)
                 
                 if !viewModel.categories.isEmpty {
                     CategoryFilterBar(
@@ -69,7 +69,7 @@ struct ProductsListView: View {
                         ProductRowView(
                             product: product,
                             categoryName: viewModel.categoryName(for: product.categoryId),
-                            imageURL: viewModel.imageURL(for: product.imagesUrl?.thumb)
+                            imageURL: viewModel.imageURL(for: product.imagesUrl?.small)
                         )
                     }
                     

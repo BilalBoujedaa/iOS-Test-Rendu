@@ -23,7 +23,7 @@ final class ProductsViewModel: ObservableObject {
     @Published private(set) var state: ProductsViewState = .idle
     @Published private(set) var filteredProducts: [Product] = []
     @Published private(set) var categories: [Category] = []
-    @Published private(set) var selectedCategoryId: Int?
+    @Published var selectedCategoryId: Int?
     @Published private(set) var isLoadingMore: Bool = false
 
     @Published private(set) var searchQuery: String = ""
@@ -65,8 +65,7 @@ final class ProductsViewModel: ObservableObject {
     }
      
     // MARK: - Category filter
-
-    /// Restarts pagination from page 1 whenever the category filter changes.
+ 
     func selectCategory(_ id: Int?) {
         guard selectedCategoryId != id else { return }
         selectedCategoryId = id
@@ -86,7 +85,7 @@ final class ProductsViewModel: ObservableObject {
         categories.first(where: { $0.id == id })?.name ?? "Uncategorized"
     }
 
-    private func applyFilter() {
+    func applyFilter() {
         let source = browseProducts
         if let selectedCategoryId {
             filteredProducts = source.filter { $0.categoryId == selectedCategoryId }
