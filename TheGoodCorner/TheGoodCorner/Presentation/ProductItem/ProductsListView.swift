@@ -73,6 +73,20 @@ struct ProductsListView: View {
                         )
                     }
                     
+                    .onAppear {
+                        guard viewModel.selectedCategoryId == nil else { return }
+                        Task { await viewModel.loadMoreIfNeeded(currentItem: product) }
+                    }
+                    
+                }
+                
+                if viewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
                 }
                 
             }

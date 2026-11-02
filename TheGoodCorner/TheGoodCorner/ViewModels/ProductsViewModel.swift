@@ -31,6 +31,7 @@ final class ProductsViewModel: ObservableObject {
 
     private var browseProducts: [Product] = []
     private var browsePage = 1
+    private var browseHasMore = true
  
     private let apiClient: APIClientProtocol
     private let baseURL: URL
@@ -69,9 +70,38 @@ final class ProductsViewModel: ObservableObject {
     func selectCategory(_ id: Int?) {
         guard selectedCategoryId != id else { return }
         selectedCategoryId = id
+ 
+        applyFilter()
+    }
+    
+    // MARK: - Pagination (infinite scroll)
 
-        browsePage = 1
-        Task { await loadInitialData() }
+    /// Call when a row appears. Loads the next page once the user nears the
+    /// end of the currently visible (filtered) list.
+    func loadMoreIfNeeded(currentItem: Product) async {
+        guard !isLoadingMore else { return }
+        guard let index = filteredProducts.firstIndex(where: { $0.id == currentItem.id }) else { return }
+        guard index >= filteredProducts.count - 3 else { return } // near the end
+
+        guard browseHasMore else { return }
+        await loadMoreBrowseListings()
+    }
+
+    private func loadMoreBrowseListings() async {
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+        let nextPage = browsePage + 1
+        do {
+            let response = try await apiClient.fetchProducts(page: nextPage, limit: pageSize, query: nil)
+            let existingIds = Set(browseProducts.map(\.id))
+            let newItems = response.items.filter { !existingIds.contains($0.id) }
+            browseProducts.append(contentsOf: newItems)
+            browsePage = nextPage
+            browseHasMore = response.hasMore
+            applyFilter()
+        } catch {
+            // Best-effort: keep the current list, just stop trying this page.
+        }
     }
     
     // MARK: - Shared helpers
