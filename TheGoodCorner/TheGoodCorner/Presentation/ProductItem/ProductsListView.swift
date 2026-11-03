@@ -16,15 +16,7 @@ struct ProductsListView: View {
         NavigationStack {
             
             VStack(spacing: 0) {
-                
-                Text("Products")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(.bar)
-                    .accessibilityAddTraits(.isHeader)
-                
+      
                 if !viewModel.categories.isEmpty {
                     CategoryFilterBar(
                         categories: viewModel.categories,
@@ -34,8 +26,18 @@ struct ProductsListView: View {
                 }
                 
                 content
+                    .navigationBarTitleDisplayMode(.inline)
                 
-            } 
+            }
+            .navigationTitle("Products")
+            
+            .searchable(
+                text: Binding(
+                    get: { viewModel.searchQuery },
+                    set: { viewModel.updateSearchQuery($0) }
+                ),
+                prompt: "Search listings"
+            )
             
             .task {
                 if viewModel.state == .idle {
@@ -73,6 +75,20 @@ struct ProductsListView: View {
                         )
                     }
                     
+                    .onAppear {
+                        guard viewModel.selectedCategoryId == nil else { return }
+                        Task { await viewModel.loadMoreIfNeeded(currentItem: product) }
+                    }
+                    
+                }
+                
+                if viewModel.isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
                 }
                 
             }

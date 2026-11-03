@@ -33,6 +33,7 @@
 		FAC5FEFB30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "TheGoodCorner" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Presentation/Shared/imageURL.swift,
 				REFLECTION.md,
 			);
 			target = FA50156C308C1D1900279733 /* TheGoodCorner */;
@@ -40,6 +41,13 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		FA962AC6309A549F00C109D0 /* Exceptions for "TheGoodCorner" folder in "Copy Bundle Resources" phase from "TheGoodCorner" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = FA50156B308C1D1900279733 /* Resources */;
+			membershipExceptions = (
+				Presentation/Shared/imageURL.swift,
+			);
+		};
 		FAC5FEFC30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "Compile Sources" phase from "TheGoodCorner" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = FA501569308C1D1900279733 /* Sources */;
@@ -55,6 +63,7 @@
 			exceptions = (
 				FAC5FEFB30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "TheGoodCorner" target */,
 				FAC5FEFC30950CD1007078B3 /* Exceptions for "TheGoodCorner" folder in "Compile Sources" phase from "TheGoodCorner" target */,
+				FA962AC6309A549F00C109D0 /* Exceptions for "TheGoodCorner" folder in "Copy Bundle Resources" phase from "TheGoodCorner" target */,
 			);
 			path = TheGoodCorner;
 			sourceTree = "<group>";
