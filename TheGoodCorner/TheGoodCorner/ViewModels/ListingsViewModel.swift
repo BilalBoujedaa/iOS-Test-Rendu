@@ -1,5 +1,5 @@
 //
-//  ProductsViewModel.swift
+//  ListingsViewModel.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 28/10/2026.
@@ -8,7 +8,7 @@
 import Foundation
 internal import Combine
   
-enum ProductsViewState: Equatable {
+enum ListingsViewState: Equatable {
     case idle
     case loading
     case loaded
@@ -17,11 +17,11 @@ enum ProductsViewState: Equatable {
 }
 
 @MainActor
-final class ProductsViewModel: ObservableObject {
+final class ListingsViewModel: ObservableObject {
     private let pageSize = 10
 
-    @Published private(set) var state: ProductsViewState = .idle
-    @Published private(set) var filteredProducts: [Product] = []
+    @Published private(set) var state: ListingsViewState = .idle
+    @Published private(set) var filteredListings: [Listing] = []
     @Published private(set) var categories: [Category] = []
     @Published var selectedCategoryId: Int?
     @Published private(set) var isLoadingMore: Bool = false
@@ -29,11 +29,11 @@ final class ProductsViewModel: ObservableObject {
     @Published private(set) var searchQuery: String = ""
     @Published private(set) var isSearchActive: Bool = false
 
-    private var browseProducts: [Product] = []
+    private var browseListings: [Listing] = []
     private var browsePage = 1
     private var browseHasMore = true
     
-    private var searchResults: [Product] = []
+    private var searchResults: [Listing] = []
     private var searchPage = 1
     private var searchHasMore = true
     
@@ -59,10 +59,10 @@ final class ProductsViewModel: ObservableObject {
         state = .loading
         browsePage = 1
         do {
-            async let productsResponse = apiClient.fetchProducts(page: 1, limit: pageSize, query: nil)
+            async let listingsResponse = apiClient.fetchListings(page: 1, limit: pageSize, query: nil)
             async let categoriesResponse = apiClient.fetchCategories()
-            let (productsResult, categoriesResult) = try await (productsResponse, categoriesResponse)
-            browseProducts = productsResult.items 
+            let (listingsResult, categoriesResult) = try await (listingsResponse, categoriesResponse)
+            browseListings = listingsResult.items
             categories = categoriesResult
             applyFilter()
         } catch {
@@ -87,10 +87,10 @@ final class ProductsViewModel: ObservableObject {
 
     /// Call when a row appears. Loads the next page once the user nears the
     /// end of the currently visible (filtered) list.
-    func loadMoreIfNeeded(currentItem: Product) async {
+    func loadMoreIfNeeded(currentItem: Listing) async {
         guard !isLoadingMore else { return }
-        guard let index = filteredProducts.firstIndex(where: { $0.id == currentItem.id }) else { return }
-        guard index >= filteredProducts.count - 3 else { return } // near the end
+        guard let index = filteredListings.firstIndex(where: { $0.id == currentItem.id }) else { return }
+        guard index >= filteredListings.count - 3 else { return } // near the end
 
         if isSearchActive {
             guard searchHasMore else { return }
@@ -106,10 +106,10 @@ final class ProductsViewModel: ObservableObject {
         defer { isLoadingMore = false }
         let nextPage = browsePage + 1
         do {
-            let response = try await apiClient.fetchProducts(page: nextPage, limit: pageSize, query: nil)
-            let existingIds = Set(browseProducts.map(\.id))
+            let response = try await apiClient.fetchListings(page: nextPage, limit: pageSize, query: nil)
+            let existingIds = Set(browseListings.map(\.id))
             let newItems = response.items.filter { !existingIds.contains($0.id) }
-            browseProducts.append(contentsOf: newItems)
+            browseListings.append(contentsOf: newItems)
             browsePage = nextPage
             browseHasMore = response.hasMore
             applyFilter()
@@ -124,7 +124,7 @@ final class ProductsViewModel: ObservableObject {
         let query = currentTrimmedQuery
         let nextPage = searchPage + 1
         do {
-            let response = try await apiClient.fetchProducts(page: nextPage, limit: pageSize, query: query)
+            let response = try await apiClient.fetchListings(page: nextPage, limit: pageSize, query: query)
             guard currentTrimmedQuery == query else { return }
             let existingIds = Set(searchResults.map(\.id))
             let newItems = response.items.filter { !existingIds.contains($0.id) }
@@ -171,7 +171,7 @@ final class ProductsViewModel: ObservableObject {
         searchPage = 1
         searchHasMore = true
         do {
-            let response = try await apiClient.fetchProducts(page: 1, limit: pageSize, query: query)
+            let response = try await apiClient.fetchListings(page: 1, limit: pageSize, query: query)
             guard !Task.isCancelled, currentTrimmedQuery == query else { return }
             isSearchActive = true
             searchResults = response.items
@@ -190,19 +190,24 @@ final class ProductsViewModel: ObservableObject {
     }
     
     // MARK: - Shared helpers
+    
+    func imageURL(for path: String?) -> URL? {
+            guard let path, !path.isEmpty else { return nil }
+            return URL(string: path, relativeTo: baseURL)?.absoluteURL
+        }
  
     func categoryName(for id: Int) -> String {
         categories.first(where: { $0.id == id })?.name ?? "Uncategorized"
     }
 
     func applyFilter() {
-        let source = isSearchActive ? searchResults : browseProducts
+        let source = isSearchActive ? searchResults : browseListings
         if let selectedCategoryId {
-            filteredProducts = source.filter { $0.categoryId == selectedCategoryId }
+            filteredListings = source.filter { $0.categoryId == selectedCategoryId }
         } else {
-            filteredProducts = source
+            filteredListings = source
         }
-        state = filteredProducts.isEmpty ? .empty : .loaded
+        state = filteredListings.isEmpty ? .empty : .loaded
     }
     
     static func message(for error: Error) -> String {

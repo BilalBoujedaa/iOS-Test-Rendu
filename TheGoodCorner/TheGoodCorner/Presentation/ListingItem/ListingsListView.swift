@@ -1,5 +1,5 @@
 //
-//  ProductsListView.swift
+//  ListingsListView.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 29/10/2026.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ProductsListView: View {
+struct ListingsListView: View {
     
-    @ObservedObject var viewModel: ProductsViewModel
+    @ObservedObject var viewModel: ListingsViewModel
     
     var body: some View {
         
@@ -29,7 +29,7 @@ struct ProductsListView: View {
                     .navigationBarTitleDisplayMode(.inline)
                 
             }
-            .navigationTitle("Products")
+            .navigationTitle("Listings")
             
             .searchable(
                 text: Binding(
@@ -60,24 +60,23 @@ struct ProductsListView: View {
             EmptyStateView()
         case .loaded:
             List {
-                ForEach(viewModel.filteredProducts) { product in
+                ForEach(viewModel.filteredListings) { listing in
                     NavigationLink {
-                        ProductItemDetailView(
-                            product: product,
-                            categoryName: viewModel.categoryName(for: product.categoryId),
-                            imageURL: viewModel.imageURL(for: product.imagesUrl?.thumb)
+                        ListingItemDetailView(
+                            listing: listing,
+                            categoryName: viewModel.categoryName(for: listing.categoryId),
+                            imageURL: viewModel.imageURL(for: listing.imagesUrl?.thumb)
                         )
                     } label: {
-                        ProductRowView(
-                            product: product,
-                            categoryName: viewModel.categoryName(for: product.categoryId),
-                            imageURL: viewModel.imageURL(for: product.imagesUrl?.small)
+                        ListingRowView(
+                            listing: listing,
+                            categoryName: viewModel.categoryName(for: listing.categoryId),
+                            imageURL: viewModel.imageURL(for: listing.imagesUrl?.small)
                         )
                     }
-                    
                     .onAppear {
                         guard viewModel.selectedCategoryId == nil else { return }
-                        Task { await viewModel.loadMoreIfNeeded(currentItem: product) }
+                        Task { await viewModel.loadMoreIfNeeded(currentItem: listing) }
                     }
                     
                 }
@@ -99,5 +98,5 @@ struct ProductsListView: View {
 }
 
 #Preview {
-    ProductsListView(viewModel: ProductsViewModel())
+    ListingsListView(viewModel: ListingsViewModel())
 }

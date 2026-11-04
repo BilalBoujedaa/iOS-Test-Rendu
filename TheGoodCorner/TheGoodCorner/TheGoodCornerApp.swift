@@ -11,7 +11,7 @@ import SwiftUI
 struct TheGoodCornerApp: App {
     var body: some Scene {
         WindowGroup {
-            ProductsListView(viewModel: ProductsViewModel())
+            ListingsListView(viewModel: ListingsViewModel())
         }
     }
 }

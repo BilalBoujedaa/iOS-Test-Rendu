@@ -1,5 +1,5 @@
 //
-//  ProductItemDetailView.swift
+//  ListingItemDetailView.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 30/10/2026.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct ProductItemDetailView: View {
-    let product: Product
+struct ListingItemDetailView: View {
+    let listing: Listing
     let categoryName: String
     let imageURL: URL?
     
     private var priceText: String {
-        product.price.formatted(.currency(code: "EUR"))
+        listing.price.formatted(.currency(code: "EUR"))
     }
     
     private var dateText: String? {
-        guard let date = product.creationDate else { return nil }
+        guard let date = listing.creationDate else { return nil }
         return date.formatted(date: .abbreviated, time: .shortened)
     }
     
@@ -39,7 +39,7 @@ struct ProductItemDetailView: View {
                         
                         Spacer()
                         
-                        if product.isUrgent {
+                        if listing.isUrgent {
                             Label("Urgent", systemImage: "bolt.fill")
                                 .font(.caption2)
                                 .fontWeight(.semibold)
@@ -51,7 +51,7 @@ struct ProductItemDetailView: View {
                         }
                     }
                     
-                    Text(product.title)
+                    Text(listing.title)
                         .font(.title2)
                         .fontWeight(.bold)
                     
@@ -72,15 +72,14 @@ struct ProductItemDetailView: View {
                     Text("Description")
                         .font(.headline)
                     
-                    Text(product.description.isEmpty ? "No description provided." : product.description)
+                    Text(listing.description.isEmpty ? "No description provided." : listing.description)
                         .font(.body)
-                        .foregroundStyle(product.description.isEmpty ? .secondary : .primary)
+                        .foregroundStyle(listing.description.isEmpty ? .secondary : .primary)
                 }
                 .padding(.horizontal)
             }
             .padding(.bottom, 24)
-        }
-//        .navigationTitle("Details")
+        } 
         .navigationBarTitleDisplayMode(.inline)
     }
 }

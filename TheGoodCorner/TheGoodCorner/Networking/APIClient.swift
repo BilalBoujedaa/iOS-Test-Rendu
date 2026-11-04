@@ -24,7 +24,7 @@ final class APIClient: APIClientProtocol {
         self.decoder = JSONDecoder()
     }
 
-    func fetchProducts(page: Int, limit: Int, query: String? = nil) async throws -> ProductsResponse {
+    func fetchListings(page: Int, limit: Int, query: String? = nil) async throws -> ListingFeed {
         var queryItems = [
             URLQueryItem(name: "page", value: String(page)),
             URLQueryItem(name: "limit", value: String(limit))
