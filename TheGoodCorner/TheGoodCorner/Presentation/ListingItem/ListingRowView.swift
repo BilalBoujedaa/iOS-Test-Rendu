@@ -1,5 +1,5 @@
 //
-//  ProductRowView.swift
+//  ListingRowView.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 29/10/2026.
@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct ProductRowView: View {
-    let product: Product
+struct ListingRowView: View {
+    let listing: Listing
     let categoryName: String
     let imageURL: URL?
     
     let isiPad: Bool = UIDevice.current.userInterfaceIdiom == .pad
 
     private var priceText: String {
-        product.price.formatted(.currency(code: "EUR"))
+        listing.price.formatted(.currency(code: "EUR"))
     }
 
     var body: some View {
@@ -29,7 +29,7 @@ struct ProductRowView: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
 
-                Text(product.title)
+                Text(listing.title)
                     .font(.body)
                     .fontWeight(.medium)
                     .lineLimit(2)
@@ -43,7 +43,7 @@ struct ProductRowView: View {
                     
                 Spacer()
 
-                    if product.isUrgent {
+                    if listing.isUrgent {
                         Label("Urgent", systemImage: "bolt.fill")
                             .font(.caption2)
                             .fontWeight(.semibold)
@@ -62,8 +62,8 @@ struct ProductRowView: View {
     }
 
     private var accessibilityLabel: String {
-        var parts = [product.title, categoryName, priceText]
-        if product.isUrgent {
+        var parts = [listing.title, categoryName, priceText]
+        if listing.isUrgent {
             parts.append("Urgent")
         }
         return parts.joined(separator: ", ")

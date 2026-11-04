@@ -11,13 +11,13 @@ struct LoadingStateView: View {
     var body: some View {
         VStack(spacing: 12) {
             ProgressView()
-            Text("Loading products…")
+            Text("Loading listings…")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Loading products")
+        .accessibilityLabel("Loading listings")
     }
 }
 
@@ -43,14 +43,14 @@ struct ErrorStateView: View {
                     .fontWeight(.semibold)
             }
             .buttonStyle(.borderedProminent)
-            .accessibilityHint("Retries loading the products")
+            .accessibilityHint("Retries loading the listings")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 struct EmptyStateView: View {
-    var title: String = "No products found"
+    var title: String = "No listings found"
     var message: String = "Try a different category."
 
     var body: some View {

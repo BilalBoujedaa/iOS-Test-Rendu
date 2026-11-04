@@ -35,9 +35,9 @@ final class TheGoodCornerTests: XCTestCase {
     
     // MARK: - Request building
 
-    /// Verifies that `APIClient.fetchProducts` encodes page, limit and query
+    /// Verifies that `APIClient.fetchListings` encodes page, limit and query
     /// into the request URL's query string, without hitting the real network.
-    func test_fetchProducts_buildsCorrectQueryItems() async throws {
+    func test_fetchListings_buildsCorrectQueryItems() async throws {
         // 1. Intercept the outgoing request and capture it so we can inspect the URL.
         var capturedRequest: URLRequest?
         MockURLProtocol.requestHandler = { request in
@@ -52,7 +52,7 @@ final class TheGoodCornerTests: XCTestCase {
 
         // 2. Build an APIClient backed by a session whose traffic is stubbed by MockURLProtocol.
         let client = await APIClient(session: MockURLProtocol.makeSession(), baseURL: URL(string: "http://127.0.0.1:8080")!)
-        _ = try await client.fetchProducts(page: 2, limit: 10, query: "vinyle")
+        _ = try await client.fetchListings(page: 2, limit: 10, query: "vinyle")
 
         // 3. Extract the query items from the captured request URL.
         let url = try XCTUnwrap(capturedRequest?.url)
@@ -85,7 +85,7 @@ final class TheGoodCornerTests: XCTestCase {
         }
         """.data(using: .utf8)!
 
-        let listing = try JSONDecoder().decode(Product.self, from: json)
+        let listing = try JSONDecoder().decode(Listing.self, from: json)
 
         XCTAssertEqual(listing.id, 1547408955)
         XCTAssertEqual(listing.price, 10)
@@ -112,7 +112,7 @@ final class TheGoodCornerTests: XCTestCase {
         }
         """.data(using: .utf8)!
 
-        let listing = try JSONDecoder().decode(Product.self, from: json)
+        let listing = try JSONDecoder().decode(Listing.self, from: json)
 
         XCTAssertEqual(listing.id, 42)
         XCTAssertFalse(listing.isUrgent)

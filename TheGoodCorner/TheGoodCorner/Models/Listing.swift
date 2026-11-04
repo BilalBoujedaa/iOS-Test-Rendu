@@ -1,5 +1,5 @@
 //
-//  Product.swift
+//  Listing.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 24/10/2026.
@@ -12,7 +12,7 @@ struct ImagesURL: Decodable, Equatable {
     let thumb: String?
 }
 
-struct Product: Identifiable, Decodable, Equatable {
+struct Listing: Identifiable, Decodable, Equatable {
     let id: Int
     let price: Int
     let categoryId: Int
@@ -36,14 +36,14 @@ struct Product: Identifiable, Decodable, Equatable {
         price = try container.decode(Int.self, forKey: .price)
         categoryId = try container.decode(Int.self, forKey: .categoryId)
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
-        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Untitled product"
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Untitled listing"
         // Assumption: is_urgent is not guaranteed on every item, default to false when absent.
         isUrgent = try container.decodeIfPresent(Bool.self, forKey: .isUrgent) ?? false
         // Assumption: images_url may be entirely absent; treat as "no image" rather than failing decode.
         imagesUrl = try container.decodeIfPresent(ImagesURL.self, forKey: .imagesUrl)
         // Assumption: a malformed/absent date should not fail the whole decode; the UI can just omit it.
         if let dateString = try container.decodeIfPresent(String.self, forKey: .creationDate) {
-            creationDate = Product.dateFormatter.date(from: dateString)
+            creationDate = Listing.dateFormatter.date(from: dateString)
         } else {
             creationDate = nil
         }

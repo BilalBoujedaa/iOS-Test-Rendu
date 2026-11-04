@@ -1,5 +1,5 @@
 //
-//  ProductsResponse.swift
+//  ListingFeed.swift
 //  TheGoodCorner
 //
 //  Created by MacBook on 24/10/2026.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ProductsResponse: Decodable, Equatable {
-    let items: [Product]
+struct ListingFeed: Decodable, Equatable {
+    let items: [Listing]
     let total: Int
     let page: Int
     let limit: Int

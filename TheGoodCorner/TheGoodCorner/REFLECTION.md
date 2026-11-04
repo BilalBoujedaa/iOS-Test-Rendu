@@ -18,7 +18,7 @@ iOS application (Swift/SwiftUI) displaying listings from a local API
 (`server/`,  `http://localhost:8080`). The complete API contract is described in
 `server/swagger.yaml`.
 
-Goal of the exercise: demonstrate product judgment on a deliberately
+Goal of the exercise: demonstrate listing judgment on a deliberately
 narrow scope, a testable architecture, good accessibility, and the ability to handle
 the gray areas of the brief/API in a reasoned way rather than by blocking.
 
@@ -54,7 +54,7 @@ testability (ViewModel independent of the UI) and its consistency with SwiftUI's
 reactive binding (`@Published`, `ObservableObject`).
 
 - **Model** (`Models/`): `Decodable` structures faithful to the observed contract
-  (Product, `Category`, ProductsResponse), without UI/network dependency. Responsible
+  (Listing, `Category`, ListingsResponse), without UI/network dependency. Responsible
   solely for representing the data.
 
 - **ViewModel** (`ViewModels/`): `ObservableObject` `@MainActor`, serves
@@ -111,7 +111,7 @@ responses inspected before development.
   the need for a separate call to `/categories` to resolve the displayed name.
   Both calls will be made in parallel at load time.
 - **Description**: text field of highly variable length (observed from a few words to
-  several hundred words). Product decision: truncated display on the list
+  several hundred words). Listing decision: truncated display on the list
   (e.g. `lineLimit(2)`) to preserve readability, full scrollable text on
   the detail screen, with respect for Dynamic Type.
 - **List envelope**: structure confirmed consistent with the brief — `total`,
@@ -144,6 +144,7 @@ The AI is used as an execution accelerator, not as a decision-maker.
 | `is_urgent` could be omitted for certain unobserved listings | Two available API examples show the field always present | Defensive decoding retained as a precaution (`decodeIfPresent` + default `false`) |
 | `images_url` could be entirely absent for certain listings | Not observed in the provided examples | Modeled as optional, with placeholder if `nil` |
 | Highly variable description length (up to several hundred words) | Real API examples | Truncation on the list (`lineLimit(2)`), full scrollable display on the detail screen |
+| Filtering and pagination by category | API contract | Pass category_id as a query parameter to /listings so that pagination is scoped to the selected category — each page returns only listings from that category (server-side filtering) |
 
 These arbitrations will be confirmed, refined, or revised in the following commits, as
 development progresses.
